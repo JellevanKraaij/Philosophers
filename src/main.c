@@ -11,10 +11,22 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <string.h>
+#include "philo.h"
 
-#include "helloworld.h"
-
-int	main(void)
+int	main(int argc, char **argv)
 {
-	printf("Hello world!\n");
+	t_params	params;
+
+	memset(&params, 0, sizeof(params));
+	if (parse_params(argc, argv, &params) < 0)
+		return (1);
+	if (params_init(&params) < 0)
+	{
+		params_destroy(&params);
+		printf("system error\n");
+		return (1);
+	}
+	run_simulation(&params);
+	params_destroy(&params);
 }

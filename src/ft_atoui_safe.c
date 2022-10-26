@@ -1,16 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   helloworld.h                                       :+:    :+:            */
+/*   ft_atoui_safe.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jvan-kra <jvan-kra@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/03/30 23:41:24 by jvan-kra      #+#    #+#                 */
-/*   Updated: 2022/03/30 23:41:24 by jvan-kra      ########   odam.nl         */
+/*   Created: 2022/10/25 19:58:53 by jvan-kra      #+#    #+#                 */
+/*   Updated: 2022/10/25 19:58:53 by jvan-kra      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HELLOWORLD_H
-# define HELLOWORLD_H
+#include "philo.h"
+#include <limits.h>
 
-#endif
+static int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+int	ft_atoui_safe(const char *str, unsigned int *num)
+{
+	long	ret;
+	int		len;
+
+	ret = 0;
+	len = 0;
+	while (ft_isdigit(*str))
+	{
+		ret = (ret * 10) + (*str - '0');
+		if (ret > (long)UINT_MAX)
+			return (-1);
+		str++;
+		len++;
+	}
+	if (*str != '\0')
+		return (-1);
+	*num = ret;
+	return (len);
+}
