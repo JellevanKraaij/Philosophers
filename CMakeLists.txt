@@ -10,6 +10,7 @@ set (SRCS
 	src/params.c
 	src/simulation.c
 	src/philo.c
+	src/philo_utils.c
 	src/ft_atoui_safe.c
 	)
 set (EXEC_NAME philo)

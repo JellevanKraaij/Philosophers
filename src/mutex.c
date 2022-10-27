@@ -37,7 +37,7 @@ int	mutex_create(t_mutex *mutex)
  */
 int	mutex_destroy(t_mutex *mutex)
 {
-	if (mutex->initialized)
+	if (!mutex->initialized)
 		return (-1);
 	if (pthread_mutex_destroy(&mutex->mutex))
 		return (-1);
