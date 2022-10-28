@@ -19,26 +19,20 @@ int	philo_sim_stop(t_philo *philo_data)
 int	philo_print(t_philo *philo_data, char *str, int check_stop)
 {
 	unsigned int	time;
-	int				sim_stop;
 	int				ret;
 
 	ret = 0;
 	if (ft_gettime_ms(&time))
 		return (-1);
 	time -= philo_data->shared->sim_start_time;
-	if (mutex_lock(&philo_data->shared->print_mutex) < 0)
+	if (mutex_lock(&philo_data->shared->sim_mutex) < 0)
 		return (-1);
-	sim_stop = 0;
-	if (check_stop)
-		sim_stop = philo_sim_stop(philo_data);
-	if (sim_stop < 0)
-		ret = -1;
-	if (!sim_stop)
+	if (philo_data->shared->sim_running || !check_stop)
 	{
 		if (printf("%u %u %s\n", time, philo_data->name, str) < 0)
 			ret = -1;
 	}
-	if (mutex_unlock(&philo_data->shared->print_mutex) < 0)
+	if (mutex_unlock(&philo_data->shared->sim_mutex) < 0)
 		return (-1);
 	return (ret);
 }
@@ -47,7 +41,7 @@ void	*philo_set_error(t_philo *philo_data)
 {
 	mutex_lock(&philo_data->shared->sim_mutex);
 	philo_data->shared->sim_running = 0;
-	philo_data->shared->sim_exit_code = 1;
+	philo_data->shared->sim_exit_error = 1;
 	mutex_unlock(&philo_data->shared->sim_mutex);
 	return (NULL);
 }
@@ -76,7 +70,8 @@ int	philo_take_fork(t_fork *fork)
 			return (-1);
 		if (have_fork)
 			break ;
-		usleep(PHILO_YIELD_US);
+		if (usleep(PHILO_YIELD_US))
+			return (-1);
 	}
 	return (0);
 }
@@ -108,6 +103,45 @@ int	philo_update_eat_stats(t_philo *philo_data)
 	philo_data->times_eaten++;
 	philo_data->last_eaten = time - philo_data->shared->sim_start_time;
 	if (mutex_unlock(&philo_data->mutex))
+		return (-1);
+	return (0);
+}
+
+int	philo_wait_for_seat(t_philo *philo_data)
+{
+	int	sim_stop;
+
+	while (1)
+	{
+		if (mutex_lock(&philo_data->shared->table_mutex) < 0)
+			return (-1);
+		if (philo_data->shared->table_count < \
+			philo_data->shared->number_philos - 1)
+		{
+			philo_data->shared->table_count++;
+			if (mutex_unlock(&philo_data->shared->table_mutex) < 0)
+				return (-1);
+			break ;
+		}
+		if (mutex_unlock(&philo_data->shared->table_mutex) < 0)
+			return (-1);
+		if (usleep(PHILO_YIELD_US) < 0)
+			return (-1);
+		sim_stop = philo_sim_stop(philo_data);
+		if (sim_stop < 0)
+			return (-1);
+		if (sim_stop)
+			return (1);
+	}
+	return (0);
+}
+
+int	philo_leave_table(t_philo *philo_data)
+{
+	if (mutex_lock(&philo_data->shared->table_mutex) < 0)
+		return (-1);
+	philo_data->shared->table_count--;
+	if (mutex_unlock(&philo_data->shared->table_mutex) < 0)
 		return (-1);
 	return (0);
 }

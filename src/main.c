@@ -27,6 +27,10 @@ int	main(int argc, char **argv)
 		printf("system error\n");
 		return (1);
 	}
-	run_simulation(&params);
+	if (run_simulation(&params))
+	{
+		printf("system error\n");
+		return (1);
+	}
 	params_destroy(&params);
 }

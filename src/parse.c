@@ -34,5 +34,7 @@ int	parse_params(int argc, char **argv,	t_params *params)
 			"number_of_times_each_philosopher_must_eat");
 		return (-1);
 	}
+	if (argc == 6)
+		params->times_must_eat_enabled = 1;
 	return (0);
 }

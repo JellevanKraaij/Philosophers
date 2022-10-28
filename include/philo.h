@@ -23,7 +23,7 @@
 # define THINKING_STR	"is thinking"
 # define DIED_STR		"died"
 
-# define PHILO_YIELD_US	1
+# define PHILO_YIELD_US	100
 
 typedef struct s_params	t_params;
 
@@ -55,14 +55,13 @@ typedef struct s_params
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
 	unsigned int	times_must_eat;
+	int				times_must_eat_enabled;
 
 	unsigned int	sim_start_time;
 
 	int				sim_running;
-	int				sim_exit_code;
+	int				sim_exit_error;
 	t_mutex			sim_mutex;
-
-	t_mutex			print_mutex;
 
 	unsigned int	table_count;
 	t_mutex			table_mutex;
@@ -84,6 +83,8 @@ int		philo_sim_stop(t_philo *philo_data);
 int		philo_print(t_philo *philo_data, char *str, int check_stop);
 void	*philo_set_error(t_philo *philo_data);
 int		philo_update_eat_stats(t_philo *philo_data);
+int		philo_wait_for_seat(t_philo *philo_data);
+int		philo_leave_table(t_philo *philo_data);
 
 int		philo_take_fork(t_fork *fork);
 int		philo_drop_fork(t_fork *fork);

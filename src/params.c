@@ -22,7 +22,6 @@ int	params_destroy(t_params *params)
 	forks_destroy(params->forks, params->number_philos);
 	free(params->forks);
 	mutex_destroy(&params->sim_mutex);
-	mutex_destroy(&params->print_mutex);
 	mutex_destroy(&params->table_mutex);
 	destroy_philo_mutex(params);
 	free(params->philo_data);
@@ -33,10 +32,7 @@ int	params_destroy(t_params *params)
 int	params_init(t_params *params)
 {
 	mutex_init(&params->sim_mutex);
-	mutex_init(&params->print_mutex);
 	mutex_init(&params->table_mutex);
-	if (mutex_create(&params->print_mutex) < 0)
-		return (-1);
 	if (mutex_create(&params->sim_mutex) < 0)
 		return (-1);
 	if (mutex_create(&params->table_mutex) < 0)

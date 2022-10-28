@@ -23,7 +23,7 @@ int	ft_gettime_ms(unsigned int *millis)
 
 	if (gettimeofday(&current_time, NULL) < 0)
 		return (-1);
-	*millis = ((unsigned int)current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
+	*millis = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
 	return (0);
 }
 
@@ -38,6 +38,10 @@ int	ft_sleep_ms(unsigned int ms, int (*stop_sleeping_f)(void *), void *arg)
 	stop_sleeping = 0;
 	while (1)
 	{
+		if (ft_gettime_ms(&current_ms))
+			return (-1);
+		if (current_ms - start_ms >= ms)
+			break ;
 		if (stop_sleeping_f)
 			stop_sleeping = stop_sleeping_f(arg);
 		if (stop_sleeping < 0)
@@ -46,10 +50,6 @@ int	ft_sleep_ms(unsigned int ms, int (*stop_sleeping_f)(void *), void *arg)
 			break ;
 		if (usleep(PHILO_YIELD_US) < 0)
 			return (-1);
-		if (ft_gettime_ms(&current_ms))
-			return (-1);
-		if (current_ms - start_ms >= ms)
-			break ;
 	}
 	return (0);
 }
