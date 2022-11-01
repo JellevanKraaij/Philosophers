@@ -13,24 +13,37 @@
 #include <stdio.h>
 #include <string.h>
 #include "philo.h"
+#include <stdlib.h>
+
+int	print_error_cleanup(t_params *params)
+{
+	if (params)
+		params_destroy(params);
+	printf("system error\n");
+	return (1);
+}
 
 int	main(int argc, char **argv)
 {
 	t_params	params;
+	int			result;
 
 	memset(&params, 0, sizeof(params));
-	if (parse_params(argc, argv, &params) < 0)
-		return (1);
-	if (params_init(&params) < 0)
+	result = params_init(&params, argc, argv);
+	if (result < 0)
+		return (print_error_cleanup(NULL));
+	if (result > 0)
+		return (-1);
+	if (start_simulation(&params))
+		return (print_error_cleanup(&params));
+	if (monitor_simulation(&params) < 0)
 	{
-		params_destroy(&params);
-		printf("system error\n");
-		return (1);
+		end_threads(&params, 0);
+		return (print_error_cleanup(&params));
 	}
-	if (run_simulation(&params))
-	{
-		printf("system error\n");
-		return (1);
-	}
-	params_destroy(&params);
+	if (end_simulation(&params, 1) < 0)
+		return (print_error_cleanup(&params));
+	if (params_destroy(&params) < 0)
+		return (print_error_cleanup(NULL));
+	return (EXIT_SUCCESS);
 }

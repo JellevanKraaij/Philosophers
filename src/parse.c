@@ -1,6 +1,14 @@
 #include "philo.h"
 #include <stdio.h>
 
+/**
+ * @brief parse array of strings to array of numbers
+ *
+ * @param[in] src array of strings
+ * @param[in] count amount of strings
+ * @param[out] dst array of numbers
+ * @return int 0 in case of SUCCESS, -1 if ERROR
+ */
 static int	parse_numbers(char **src, int count, unsigned int **dst)
 {
 	int	i;
@@ -15,6 +23,14 @@ static int	parse_numbers(char **src, int count, unsigned int **dst)
 	return (0);
 }
 
+/**
+ * @brief parse program parameters
+ *
+ * @param argc program argument count
+ * @param argv program arguments
+ * @param params parameter destination
+ * @return int 0 in case of SUCCESS, -1 if ERROR, 1 if USER_ERROR
+ */
 int	parse_params(int argc, char **argv,	t_params *params)
 {
 	const unsigned int	*numbers[] = \
@@ -27,12 +43,14 @@ int	parse_params(int argc, char **argv,	t_params *params)
 	if (argc < 5 || argc > 6 || \
 		parse_numbers(argv + 1, argc - 1, (unsigned int **)numbers) < 0)
 	{
-		printf("fdf: incorrect parameter\n");
-		printf("usage: ./fdf %s %s %s %s [%s]\n", \
+		if (printf("fdf: incorrect parameter\n") < 0)
+			return (-1);
+		if (printf("usage: ./fdf %s %s %s %s [%s]\n", \
 			"number_of_philosophers", "time_to_die", \
 			"time_to_eat", "time_to_sleep", \
-			"number_of_times_each_philosopher_must_eat");
-		return (-1);
+			"number_of_times_each_philosopher_must_eat") < 0)
+			return (-1);
+		return (1);
 	}
 	if (argc == 6)
 		params->times_must_eat_enabled = 1;

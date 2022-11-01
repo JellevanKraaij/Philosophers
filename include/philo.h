@@ -45,9 +45,6 @@ typedef struct s_philo
 	t_fork			*right_fork;
 }	t_philo;
 
-int		forks_create(t_fork **forks, unsigned int count);
-void	forks_destroy(t_fork *forks, unsigned int count);
-
 typedef struct s_params
 {
 	unsigned int	number_philos;
@@ -71,26 +68,34 @@ typedef struct s_params
 	t_fork			*forks;
 }	t_params;
 
-int		parse_params(int argc, char **argv,	t_params *philo);
-int		params_init(t_params *params);
+int		params_init(t_params *params, int argc, char **argv);
+int		parse_params(int argc, char **argv,	t_params *params);
 int		params_destroy(t_params *params);
 
-int		run_simulation(t_params *params);
-void	*philo_routine(void *arg);
+int		start_simulation(t_params *params);
+int		monitor_simulation(t_params *params);
+int		end_simulation(t_params *params, int gracefull);
 
+void	*philo_routine(void *arg);
 typedef int				(*t_stopf)(void *);
 int		philo_sim_stop(t_philo *philo_data);
 int		philo_print(t_philo *philo_data, char *str, int check_stop);
 void	*philo_set_error(t_philo *philo_data);
 int		philo_update_eat_stats(t_philo *philo_data);
-int		philo_wait_for_seat(t_philo *philo_data);
+int		philo_sit_down_at_table(t_philo *philo_data);
 int		philo_leave_table(t_philo *philo_data);
-
 int		philo_take_fork(t_fork *fork);
 int		philo_drop_fork(t_fork *fork);
-
 int		print_time_protected(unsigned int time, unsigned int philo_name, \
 			char *str, t_mutex *print_mutex);
+
+int		init_threads(pthread_t **threads, unsigned int count, \
+			void *(*start_routine)(void *), t_philo *philo_data);
+int		end_threads(t_params *params, int gracefull);
+
+int		forks_create(t_fork **forks, unsigned int count);
+int		forks_destroy(t_fork *forks, unsigned int count);
+
 int		ft_gettime_ms(unsigned int *millis);
 int		ft_sleep_ms(unsigned int ms, int (*stop_sleeping_f)(void *), void *arg);
 void	*ft_calloc(size_t count, size_t size);

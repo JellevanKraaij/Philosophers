@@ -8,9 +8,12 @@ set (SRCS
 	src/mutex.c
 	src/forks.c
 	src/params.c
-	src/simulation.c
+	src/threads.c
+	src/run_sim.c
+	src/monitoring.c
 	src/philo.c
 	src/philo_utils.c
+	src/philo_eat.c
 	src/ft_atoui_safe.c
 	)
 set (EXEC_NAME philo)

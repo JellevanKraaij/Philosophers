@@ -4,6 +4,12 @@
 #include <pthread.h>
 #include <stdio.h>
 
+/**
+ * @brief philosopher is thinking
+ *
+ * @param philo_data
+ * @return int 0 in case of SUCCESS, -1 if ERROR
+ */
 int	philo_thinking(t_philo *philo_data)
 {
 	if (philo_print(philo_data, THINKING_STR, 1) < 0)
@@ -11,6 +17,12 @@ int	philo_thinking(t_philo *philo_data)
 	return (0);
 }
 
+/**
+ * @brief philospher is sleeping
+ *
+ * @param philo_data
+ * @return int 0 in case of SUCCESS, -1 if ERROR
+ */
 int	philo_sleep(t_philo *philo_data)
 {
 	if (philo_print(philo_data, "is sleeping", 1) < 0)
@@ -21,28 +33,21 @@ int	philo_sleep(t_philo *philo_data)
 	return (0);
 }
 
+/**
+ * @brief philosopher is eating
+ *
+ * @param philo_data
+ * @return int 0 in case of SUCCESS, -1 if ERROR
+ */
 int	philo_eat(t_philo *philo_data)
 {
-	// if (philo_wait_for_seat(philo_data))
-	// 	return (-1);
-	t_fork	*f1;
-	t_fork	*f2;
-
-	// if (philo_data->name % 2)
-	// {
-	// 	f1 = philo_data->right_fork;
-	// 	f2 = philo_data->left_fork;
-	// }
-	// else
-	// {
-		f1 = philo_data->left_fork;
-		f2 = philo_data->right_fork;
-	// }
-	if (philo_take_fork(f1) < 0)
+	if (philo_sit_down_at_table(philo_data) < 0)
+		return (-1);
+	if (philo_take_fork(philo_data->left_fork) < 0)
 		return (-1);
 	if (philo_print(philo_data, TAKEFORK_STR, 1))
 		return (-1);
-	if (philo_take_fork(f2) < 0)
+	if (philo_take_fork(philo_data->right_fork) < 0)
 		return (-1);
 	if (philo_print(philo_data, TAKEFORK_STR, 1))
 		return (-1);
@@ -56,11 +61,17 @@ int	philo_eat(t_philo *philo_data)
 	if (philo_drop_fork(philo_data->left_fork) < 0 || \
 		philo_drop_fork(philo_data->right_fork) < 0)
 		return (-1);
-	// if (philo_leave_table(philo_data) < 0)
-	// 	return (-1);
+	if (philo_leave_table(philo_data) < 0)
+		return (-1);
 	return (0);
 }
 
+/**
+ * @brief execute philosopher routines
+ *
+ * @param arg
+ * @return void*
+ */
 void	*philo_routine(void *arg)
 {
 	t_philo			*philo_data;
@@ -78,8 +89,7 @@ void	*philo_routine(void *arg)
 			return (philo_set_error(philo_data));
 		if (philo_sim_stop(philo_data))
 			return (NULL);
-		if (philo_data->shared->time_to_eat == 0 && \
-			philo_data->shared->time_to_sleep)
+		if (philo_data->shared->time_to_sleep == 0)
 		{
 			if (usleep(PHILO_YIELD_US))
 				return (philo_set_error);

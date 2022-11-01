@@ -1,7 +1,14 @@
 #include "philo.h"
 #include "mutex.h"
 
-static int	forks_create_mutex(t_fork	*forks, unsigned int count)
+/**
+ * @brief create mutex for each fork
+ *
+ * @param forks	forks that need mutex
+ * @param count amount of forks
+ * @return int 0 in case of SUCCESS, -1 if ERROR
+ */
+static int	forks_create_mutex(t_fork *forks, unsigned int count)
 {
 	unsigned int	i;
 
@@ -15,6 +22,13 @@ static int	forks_create_mutex(t_fork	*forks, unsigned int count)
 	return (0);
 }
 
+/**
+ * @brief create forks
+ *
+ * @param[out]	forks	destination
+ * @param[in]	count	amount of forks
+ * @return int	int 0 in case of SUCCESS, -1 if ERROR
+ */
 int	forks_create(t_fork	**forks, unsigned int count)
 {
 	unsigned int	i;
@@ -36,14 +50,25 @@ int	forks_create(t_fork	**forks, unsigned int count)
 	return (0);
 }
 
-void	forks_destroy(t_fork *forks, unsigned int count)
+/**
+ * @brief destroy forks
+ *
+ * @param[in]	forks source
+ * @param[in]	count amount of forks
+ * @return int	int 0 in case of SUCCESS, -1 if ERROR
+ */
+int	forks_destroy(t_fork *forks, unsigned int count)
 {
 	unsigned int	i;
+	int				ret;
 
 	i = 0;
+	ret = 0;
 	while (i < count)
 	{
-		mutex_destroy(&forks[i].mutex);
+		if (mutex_destroy(&forks[i].mutex) < 0)
+			ret = -1;
 		i++;
 	}
+	return (-1);
 }

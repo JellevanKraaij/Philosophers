@@ -18,6 +18,13 @@ static int	ft_isdigit(int c)
 	return (c >= '0' && c <= '9');
 }
 
+/**
+ * @brief protected string to unsigned interger converter
+ * protected against overflow & non numeric characters
+ * @param str
+ * @param num
+ * @return int
+ */
 int	ft_atoui_safe(const char *str, unsigned int *num)
 {
 	long	ret;
