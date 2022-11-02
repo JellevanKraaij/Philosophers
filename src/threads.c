@@ -63,8 +63,16 @@ int	end_threads(t_params *params, int gracefull)
 {
 	unsigned int	i;
 	int				exit_code;
+	int				ret;
 
 	i = 0;
+	ret = 0;
+	if (!gracefull)
+	{
+		mutex_lock(&params->sim_mutex);
+		params->sim_running = 0;
+		mutex_unlock(&params->sim_mutex);
+	}
 	while (i < params->number_philos)
 	{
 		if (gracefull)
@@ -72,8 +80,8 @@ int	end_threads(t_params *params, int gracefull)
 		else
 			exit_code = pthread_detach(params->threads[i]);
 		if (exit_code < 0)
-			return (-1);
+			ret = -1;
 		i++;
 	}
-	return (0);
+	return (ret);
 }

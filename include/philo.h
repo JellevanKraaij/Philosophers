@@ -74,7 +74,7 @@ int		params_destroy(t_params *params);
 
 int		start_simulation(t_params *params);
 int		monitor_simulation(t_params *params);
-int		end_simulation(t_params *params, int gracefull);
+int		end_simulation(t_params *params);
 
 void	*philo_routine(void *arg);
 typedef int				(*t_stopf)(void *);

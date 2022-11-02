@@ -24,7 +24,7 @@ static int	destroy_philos(t_params *params)
 		i++;
 	}
 	free(params->philo_data);
-	return (-1);
+	return (ret);
 }
 
 /**
@@ -47,7 +47,6 @@ int	params_destroy(t_params *params)
 		ret = -1;
 	if (destroy_philos(params) < 0)
 		ret = -1;
-	free(params->philo_data);
 	free(params->threads);
 	return (ret);
 }

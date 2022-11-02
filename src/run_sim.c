@@ -18,8 +18,9 @@ int	start_simulation(t_params *params)
 	if (init_threads(&params->threads, params->number_philos, \
 		philo_routine, params->philo_data) < 0)
 	{
+		mutex_lock(&params->sim_mutex);
 		params->sim_running = 0;
-		end_threads(params, 0);
+		mutex_unlock(&params->sim_mutex);
 		return (-1);
 	}
 	return (0);
@@ -32,7 +33,7 @@ int	start_simulation(t_params *params)
  * @param gracefull wait for threads
  * @return int 0 in case of SUCCESS, -1 if ERROR
  */
-int	end_simulation(t_params *params, int gracefull)
+int	end_simulation(t_params *params)
 {
-	return (end_threads(params, gracefull));
+	return (end_threads(params, 1));
 }

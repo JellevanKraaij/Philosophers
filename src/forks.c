@@ -1,5 +1,6 @@
 #include "philo.h"
 #include "mutex.h"
+#include <stdlib.h>
 
 /**
  * @brief create mutex for each fork
@@ -45,6 +46,8 @@ int	forks_create(t_fork	**forks, unsigned int count)
 	if (forks_create_mutex(*forks, count) < 0)
 	{
 		forks_destroy(*forks, count);
+		free(*forks);
+		*forks = NULL;
 		return (-1);
 	}
 	return (0);
@@ -70,5 +73,5 @@ int	forks_destroy(t_fork *forks, unsigned int count)
 			ret = -1;
 		i++;
 	}
-	return (-1);
+	return (ret);
 }
