@@ -1,6 +1,7 @@
 #include "philo.h"
 #include "mutex.h"
 #include <unistd.h>
+#include <stdio.h>
 
 /**
  * @brief set simulation end flag
@@ -8,7 +9,7 @@
  * @param params
  * @return int 0 in case of SUCCESS, -1 if ERROR
  */
-static int	simulation_set_finished(t_params *params)
+int	simulation_set_finished(t_params *params)
 {
 	if (mutex_lock(&params->sim_mutex) < 0)
 		return (-1);
@@ -119,8 +120,12 @@ static int	check_simulation_error(t_params *params)
  */
 int	monitor_simulation(t_params *params)
 {
-	int	philos_result;
+	int				philos_result;
+	unsigned int	last_ms;
+	unsigned int	current;
 
+	if (ft_gettime_ms(&last_ms) < 0)
+		return (-1);
 	while (1)
 	{
 		philos_result = check_all_philos(params);
@@ -128,7 +133,15 @@ int	monitor_simulation(t_params *params)
 			return (philos_result);
 		if (check_simulation_error(params))
 			return (-1);
-		if (usleep(PHILO_YIELD_US) < 0)
+		if (ft_gettime_ms(&current) < 0)
 			return (-1);
+		if (current - last_ms > 10)
+		{
+			printf("philo_death_check timeout (%ums)\n", current - last_ms);
+			return (-1);
+		}
+		last_ms = current;
+		// if (usleep(PHILO_YIELD_US) < 0)
+		// 	return (-1);
 	}
 }

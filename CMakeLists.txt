@@ -14,6 +14,7 @@ set (SRCS
 	src/philo.c
 	src/philo_utils.c
 	src/philo_eat.c
+	src/philo_table.c
 	src/ft_atoui_safe.c
 	)
 set (EXEC_NAME philo)

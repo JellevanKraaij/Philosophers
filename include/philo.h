@@ -19,11 +19,11 @@
 
 # define TAKEFORK_STR	"has taken a fork"
 # define EATING_STR		"is eating"
-# define SLEEPING_STR	"is_sleeping"
+# define SLEEPING_STR	"is sleeping"
 # define THINKING_STR	"is thinking"
 # define DIED_STR		"died"
 
-# define PHILO_YIELD_US	100
+# define PHILO_YIELD_US	200
 
 typedef struct s_params	t_params;
 
@@ -75,6 +75,7 @@ int		params_destroy(t_params *params);
 int		start_simulation(t_params *params);
 int		monitor_simulation(t_params *params);
 int		end_simulation(t_params *params);
+int		simulation_set_finished(t_params *params);
 
 void	*philo_routine(void *arg);
 typedef int				(*t_stopf)(void *);
@@ -84,14 +85,14 @@ void	*philo_set_error(t_philo *philo_data);
 int		philo_update_eat_stats(t_philo *philo_data);
 int		philo_sit_down_at_table(t_philo *philo_data);
 int		philo_leave_table(t_philo *philo_data);
-int		philo_take_fork(t_fork *fork);
+int		philo_take_fork(t_fork *fork, t_philo *philo_data);
 int		philo_drop_fork(t_fork *fork);
 int		print_time_protected(unsigned int time, unsigned int philo_name, \
 			char *str, t_mutex *print_mutex);
 
 int		init_threads(pthread_t **threads, unsigned int count, \
 			void *(*start_routine)(void *), t_philo *philo_data);
-int		end_threads(t_params *params, int gracefull);
+int		end_threads(t_params *params);
 
 int		forks_create(t_fork **forks, unsigned int count);
 int		forks_destroy(t_fork *forks, unsigned int count);

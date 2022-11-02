@@ -59,27 +59,21 @@ int	init_threads(pthread_t **threads, unsigned int count, \
  * @param gracefull wait for threads
  * @return int 0 in case of SUCCESS, -1 if ERROR
  */
-int	end_threads(t_params *params, int gracefull)
+int	end_threads(t_params *params)
 {
 	unsigned int	i;
-	int				exit_code;
 	int				ret;
 
 	i = 0;
 	ret = 0;
-	if (!gracefull)
-	{
-		mutex_lock(&params->sim_mutex);
-		params->sim_running = 0;
-		mutex_unlock(&params->sim_mutex);
-	}
+	if (mutex_lock(&params->sim_mutex))
+		ret = -1;
+	params->sim_running = 0;
+	if (mutex_unlock(&params->sim_mutex))
+		ret = -1;
 	while (i < params->number_philos)
 	{
-		if (gracefull)
-			exit_code = pthread_join(params->threads[i], NULL);
-		else
-			exit_code = pthread_detach(params->threads[i]);
-		if (exit_code < 0)
+		if (pthread_join(params->threads[i], NULL) < 0)
 			ret = -1;
 		i++;
 	}

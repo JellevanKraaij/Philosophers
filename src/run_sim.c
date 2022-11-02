@@ -35,5 +35,5 @@ int	start_simulation(t_params *params)
  */
 int	end_simulation(t_params *params)
 {
-	return (end_threads(params, 1));
+	return (end_threads(params));
 }

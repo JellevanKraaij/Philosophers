@@ -20,7 +20,6 @@ int	print_error_cleanup(t_params *params)
 	if (params)
 		params_destroy(params);
 	printf("system error\n");
-	perror("test");
 	return (1);
 }
 
@@ -39,7 +38,7 @@ int	main(int argc, char **argv)
 		return (print_error_cleanup(&params));
 	if (monitor_simulation(&params) < 0)
 	{
-		end_threads(&params, 0);
+		end_threads(&params);
 		return (print_error_cleanup(&params));
 	}
 	if (end_simulation(&params) < 0)

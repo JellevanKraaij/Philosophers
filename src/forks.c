@@ -34,7 +34,7 @@ int	forks_create(t_fork	**forks, unsigned int count)
 {
 	unsigned int	i;
 
-	*forks = ft_calloc(count + 1, sizeof(t_fork));
+	*forks = ft_calloc(count, sizeof(t_fork));
 	if (*forks == NULL)
 		return (-1);
 	i = 0;
