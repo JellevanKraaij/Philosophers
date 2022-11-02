@@ -59,14 +59,14 @@ int	params_destroy(t_params *params)
  * @param[in] name philosopher name (index)
  */
 static void	init_single_philo(t_philo *philo_data, t_params *params, \
-	unsigned int name)
+	unsigned int idx)
 {
-	philo_data->name = name;
+	philo_data->name = idx + 1;
 	philo_data->shared = params;
 	philo_data->fork_count = 1;
-	philo_data->left_fork = &params->forks[name];
-	if (name + 1 < params->number_philos)
-		philo_data->right_fork = &params->forks[name + 1];
+	philo_data->left_fork = &params->forks[idx];
+	if (idx + 1 < params->number_philos)
+		philo_data->right_fork = &params->forks[idx + 1];
 	else
 		philo_data->right_fork = &params->forks[0];
 	mutex_init(&philo_data->mutex);
