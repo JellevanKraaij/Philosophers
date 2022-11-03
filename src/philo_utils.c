@@ -49,19 +49,25 @@ int	philo_print(t_philo *philo_data, char *str, int check_stop)
 {
 	unsigned int	time;
 	int				ret;
+	int				stop;
 
 	ret = 0;
-	if (mutex_lock(&philo_data->shared->sim_mutex) < 0)
+	if (mutex_lock(&philo_data->shared->print_mutex) < 0)
 		return (-1);
 	if (ft_gettime_ms(&time) < 0)
 		ret = -1;
 	time -= philo_data->shared->sim_start_time;
-	if ((!check_stop || philo_data->shared->sim_running) && ret >= 0)
+	stop = 0;
+	if (check_stop)
+		stop = philo_sim_stop(philo_data);
+	if (stop < 0)
+		ret = -1;
+	if (stop == 0 && ret >= 0)
 	{
 		if (printf("%u %u %s\n", time, philo_data->name, str) < 0)
 			ret = -1;
 	}
-	if (mutex_unlock(&philo_data->shared->sim_mutex) < 0)
+	if (mutex_unlock(&philo_data->shared->print_mutex) < 0 || ret < 0)
 		return (-1);
 	return (ret);
 }

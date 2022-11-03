@@ -60,6 +60,8 @@ typedef struct s_params
 	int				sim_exit_error;
 	t_mutex			sim_mutex;
 
+	t_mutex			print_mutex;
+
 	unsigned int	table_count;
 	t_mutex			table_mutex;
 

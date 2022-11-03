@@ -121,9 +121,12 @@ int	params_init(t_params *params, int argc, char **argv)
 		return (parse_result);
 	mutex_init(&params->sim_mutex);
 	mutex_init(&params->table_mutex);
+	mutex_init(&params->print_mutex);
 	if (mutex_create(&params->sim_mutex) < 0)
 		return (-1);
 	if (mutex_create(&params->table_mutex) < 0)
+		return (-1);
+	if (mutex_create(&params->print_mutex) < 0)
 		return (-1);
 	if (forks_create(&params->forks, params->number_philos) < 0)
 		return (-1);
