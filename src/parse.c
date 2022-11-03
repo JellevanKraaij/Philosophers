@@ -55,9 +55,9 @@ int	parse_params(int argc, char **argv,	t_params *params)
 	if (argc < 5 || argc > 6 || \
 		parse_numbers(argv + 1, argc - 1, (unsigned int **)numbers) < 0)
 	{
-		if (printf("fdf: incorrect parameter\n") < 0)
+		if (printf("philosophers: incorrect parameter\n") < 0)
 			return (-1);
-		if (printf("usage: ./fdf %s %s %s %s [%s]\n", \
+		if (printf("usage: ./philo %s %s %s %s [%s]\n", \
 			"number_of_philosophers", "time_to_die", \
 			"time_to_eat", "time_to_sleep", \
 			"number_of_times_each_philosopher_must_eat") < 0)
