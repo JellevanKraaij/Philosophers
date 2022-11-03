@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   monitoring.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jvan-kra <jvan-kra@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/11/03 15:02:13 by jvan-kra      #+#    #+#                 */
+/*   Updated: 2022/11/03 15:02:13 by jvan-kra      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 #include "mutex.h"
 #include <unistd.h>
@@ -124,7 +136,7 @@ int	monitor_simulation(t_params *params)
 	unsigned int	last_ms;
 	unsigned int	current;
 
-	if (ft_gettime_ms(&last_ms) < 0)
+	if (TIMEOUT_CHECK && ft_gettime_ms(&last_ms) < 0)
 		return (-1);
 	while (1)
 	{
@@ -133,15 +145,16 @@ int	monitor_simulation(t_params *params)
 			return (philos_result);
 		if (check_simulation_error(params))
 			return (-1);
-		if (ft_gettime_ms(&current) < 0)
+		if (TIMEOUT_CHECK && ft_gettime_ms(&current) < 0)
 			return (-1);
-		if (current - last_ms > 10)
+		if (TIMEOUT_CHECK && current - last_ms > 10)
 		{
 			printf("philo_death_check timeout (%ums)\n", current - last_ms);
 			return (-1);
 		}
-		last_ms = current;
-		// if (usleep(PHILO_YIELD_US) < 0)
-		// 	return (-1);
+		if (TIMEOUT_CHECK)
+			last_ms = current;
+		if (usleep(PHILO_YIELD_US) < 0)
+			return (-1);
 	}
 }

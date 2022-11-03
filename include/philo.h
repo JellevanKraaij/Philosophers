@@ -25,6 +25,10 @@
 
 # define PHILO_YIELD_US	200
 
+# ifndef TIMEOUT_CHECK
+#  define TIMEOUT_CHECK 0
+# endif
+
 typedef struct s_params	t_params;
 
 typedef struct s_fork

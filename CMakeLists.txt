@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    CMakeLists.txt                                     :+:    :+:             #
+#                                                      +:+                     #
+#    By: jvan-kra <jvan-kra@student.codam.nl>         +#+                      #
+#                                                    +#+                       #
+#    Created: 2022/11/03 15:22:00 by jvan-kra      #+#    #+#                  #
+#    Updated: 2022/11/03 15:22:00 by jvan-kra      ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
 cmake_minimum_required(VERSION 3.23.0)
 
 project(philosophers)
@@ -24,6 +36,7 @@ set (CMAKE_C_COMPILER gcc)
 set (CMAKE_C_FLAGS "-Wall -Werror -Wextra -O3")
 set (CMAKE_C_FLAGS_DEBUG "-g -fsanitize=address") #cmake -DCMAKE_BUILD_TYPE=DEBUG to add debug flags
 set (CMAKE_C_FLAGS_THREAD "-g -fsanitize=thread")
+set (CMAKE_C_FLAGS_TIMEOUT "-DTIMEOUT_CHECK=1")
 set (CMAKE_EXPORT_COMPILE_COMMANDS ON) #vscode include path checking
 
 #norm rules so flclean and re work
