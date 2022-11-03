@@ -1,7 +1,8 @@
 # Compiled source #
 ###################
-hello-world
+philo
 build
+*.o
 
 # OS generated files #
 ######################
